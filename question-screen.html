@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FPV Drone Quiz</title>
+    <meta name="description" type="A quiz app about FPV drones and how they are used.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="app.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <header>
+        <h1>FPV Drone</h1>
+        <h2>Quiz</h2>
+        <ul>
+            <li class=".js-question-counter">Question: 0/7</li>
+            <li class=".js-score">Score: 0</li>
+        </ul>
+    </header>
+    <main>
+        <h3>What question do you think I'll put here?</h2>
+            <ul>
+                <li><input class="radio" type="radio" name="Possible Answer" value="Possible Answer" checked>
+                    <label>Possible Answer</label>
+                </li>
+                <li>
+                    <input class="radio" type="radio" name="Possible Answer" value="Possible Answer" checked>
+                    <label>Possible Answer</label>
+                </li>
+                <li>
+                    <input class="radio" type="radio" name="Possible Answer" value="Possible Answer">
+                    <label>Possible Answer</label>
+                </li>
+                <li>
+                    <input class="radio" type="radio" name="Possible Answer" value="Possible Answer">
+                    <label>Possible Answer</label>
+                </li>
+            </ul>
+
+            <br>
+            <button type="button" id="submit">Submit Answer</button>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.js" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

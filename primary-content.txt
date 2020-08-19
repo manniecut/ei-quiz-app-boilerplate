@@ -1,0 +1,114 @@
+FPV Drone Quiz
+
+What does FPV stand for in FPV drones?
+    -First Person View
+    fishing permit verified
+    fantastic piloting vehicle
+    futuristic plane vector
+
+
+
+How do FPV drone pilots fly their drones?
+    -With a controller and goggles to view what the drone camera sees.
+    With hand tracking and TV output
+    With a tablet and binoculars
+    Voice commands
+
+
+
+Why does an FPV drone commonly have 2 cameras on it?
+    One camera for front direction, one camera for back direction
+    -1 for streaming to goggles, and one for recording HD footage
+    A camera pointing forward for each eye
+    One camera for left direction, one camera for right direction
+
+
+
+What skills does FPV teach?
+    Programming skills
+    Soldering and electronic circuitry skills
+    Aviation and real world physics demonstrations
+    -All of the above
+
+
+Who is lobbying to limit recreational drone pilots and RC airplane enthusiasts alike so they have a monopoly over drone airspace use?
+    -Amazon
+    DJI
+    UPS
+    The Government
+    
+
+Out of these options, where is it illegal to fly your drone without proper permission or permits?
+    At the park, but check local ordinances
+    -Over crowds, national parks, within 5 miles of airports
+    Over bodies of water, but check local ordinances
+    At a mountain range, but check local ordinances
+
+
+What can FPV drones do that other drones can't?
+    -Freestyle acrobatic tricks
+    Take out the trash
+    Deliver your food
+    Take your dog for a walk
+
+
+
+
+
+
+~~~~ Planning the App ~~~~
+
+Pages Needed and elements
+
+Title Screen
+    -Main Picture
+    -start button, adds to question number counter
+
+Question Screen
+    -Question text
+    -4 possible answers with selection
+    -submit button that also leads to next screen depending on right or wrong answer and adds score on right answer and adds question number
+
+Correct Screen
+    -Answer is correct message
+    -picture
+    -next screen button
+        -if questions done, send to score-pass if pass, and score-fail if fail
+
+Wrong Screen
+    -Answer is wrong message
+    -picture
+    -Actual answer:
+    -next screen button
+        -if questions done, send to score-pass if pass, and score-fail if fail
+
+Score Screen - Pass 5/7
+    -Passing message
+    -Passing picture
+    -Your score is message
+    -Passing comment
+
+
+Score screen - fail
+    -Failing message
+    -Failing picture
+    -Your score is message
+    -Failing comment
+    -Restart button, sends back to main page, resets score and question counters
+
+Score screen - medium score 4/7
+    -You did okay message
+    -You did okay picture
+    -Your score is message
+    -You did okay comment
+    -Restart button, sends back to main page, resets score and question counters
+
+
+
+
+Elements needed Throughout
+-Question 0/XX element
+    -counts up on each page
+-Score: XX element
+    -counts up on each right answer
+-background image
