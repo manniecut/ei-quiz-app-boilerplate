@@ -71,15 +71,12 @@ const store = [
     }
 ];
 
-
 // Creating tracker variables with initialized values
-
 let score = 0;                     //stores current score
 let currentQuestionNumber = 0;     //stores which question we're on
 let quizStarted = false;           //stores if the quiz has started
-let submittingAnswer = false;      //checks if current answer has been submitted
-
-let answerArray = [];       //array tracks selected answer and correct answer
+let submittingAnswer = false;      //acts as a trigger for the makeQuiz function
+let answerArray = [];              //array tracks selected answer and correct answer and if they match
 
 
 /* Technical requirements:
@@ -144,7 +141,7 @@ function generateAnswerResults() {                    //creates string for answe
         <img src="images/fpv-drone-vacation.jpg" alt="This FPV drone is wearing sunglasses" class="images">
         <br>
         <p>Looks like you've got the right stuff!</p>
-        ${isLastQuestion ? buttons.score : buttons.next}
+        ${finalQuestion ? buttons.score : buttons.next}
         </div>
         `
     } else {
@@ -154,7 +151,7 @@ function generateAnswerResults() {                    //creates string for answe
         <img src="images/fpv-drone-broken-gopro.jpg" alt="This FPV drone has a broken GoPro" class="images">
         <br>
         <p>The correct answer is: "${answerArray[1]}".</p>
-        ${isLastQuestion ? buttons.score : buttons.next}
+        ${finalQuestion ? buttons.score : buttons.next}
         </div>
         `
     }
@@ -187,7 +184,7 @@ function generateScoreString() {                      //creates string for score
         <br>
         <p>Your score is ${score} out of ${store.length}</p>
         <p>Get your drone out of that tree and try again?</p>
-        <button type="button" id="restart">Try Again</button>
+        <button type="button" id="restart-quiz">Try Again</button>
         `
     } else if (score < store.length) {             //if passed
         return `
@@ -196,7 +193,7 @@ function generateScoreString() {                      //creates string for score
         <br>
         <p>Your score is ${score} out of ${store.length}</p>
         <p>You're getting there, keep practicing!</p>
-        <button type="button" id="restart">Try Again</button>
+        <button type="button" id="restart-quiz">Try Again</button>
         `
     } else {                                       //if aced it!
         return `
@@ -205,7 +202,7 @@ function generateScoreString() {                      //creates string for score
         <br>
         <p>Your score is ${score} out of ${store.length}</p>
         <p>You know FPV!</p>
-        <button type="button" id="restart">Try Again</button>
+        <button type="button" id="restart-quiz">Try Again</button>
         `
     }
 
@@ -217,7 +214,6 @@ function makeQuiz() {                         //displays score or title screen o
     if (quizStarted === false) {                  //if the quiz has NOT started, do this:
         if (currentQuestionNumber === store.length) {  //if currentQ# is totalQ# (aka quiz complete) change main to SCORE SCREEN
             const resultsString = generateScoreString();                  //set const to results of gSS function
-            const finalImage = generateImage();                           //set const to results of gI function
             $('main').html(resultsString);                                //change main contents prev const resultsString
         } else if (currentQuestionNumber < store.length) {        //if quiz incomplete (and not started) change main to TITLE SCREEN
             const titleScreenString = generateTitleString();              //set const to function gTS
@@ -240,7 +236,7 @@ function startQuiz() {                        //starts quizStarted tracker
 
 function setQuestionObject() {                //returns [i: i + 1, question: store[i]]
     let i = currentQuestionNumber;
-    let currentQuestionObject = store[i];   //sets the string for current question to value from array based on current question number
+    let currentQuestionObject = store[i];     //sets the string for current question to value from array based on current question number
     return {
         i: i + 1,
         question: currentQuestionObject
@@ -257,16 +253,37 @@ function nextQuestion() {                     //advances quiz to next question
     }
 }
 
-function checkCorrectAnswer() {               //DO
+function checkCorrectAnswer() {               //checks which answer was selected and compares to correct answer
+    let radios = $('input:radio[name=answer]');
+    let selectedAnswer = $('input[name="answer"]:checked').data('answer');   //creates a variable with the selected answer
+    let correctAnswer = store[currentQuestionNumber].correctAnswer;          //creates a variable with the correct answer
+    if (radios.filter(':checked').length === 0) {         //if no answer has been selected
+        alert('You must pick one!');                            //alert user to make selection
+        return;                                                 //end script
+    } else {                                              //if answer has been selected
+        submittingAnswer = true;                                //set submitting tracker to true
+        if (selectedAnswer === correctAnswer) {                 //if answer is correct
+            score++;                                                     //add 1 to score
+            answerArray = [true, correctAnswer, selectedAnswer];         //set answer array
+        } else {                                                //if incorrect
+            answerArray = [false, correctAnswer, selectedAnswer];        //set answer array
+        }
+
+    }
 
 }
 
-function seeScore() {                         //DO
+function seeScore() {                         //sets trackers appropriately to trigger score screen
+    quizStarted = false;
+    currentQuestionNumber++;
 
 }
 
-function restartQuiz() {                      //DO
-
+function restartQuiz() {                      //initializes tracker values
+    currentQuestionNumber = 0;
+    quizStarted = false;
+    submittingAnswer = false;
+    answerArray = [];
 }
 
 /********** EVENT HANDLER FUNCTIONS **********/
