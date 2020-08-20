@@ -109,7 +109,7 @@ function generateQuizScreen(currentQuestionObject) {  //argument is currentQuest
             <li>Question: ${currentQuestionObject.i}/${store.length}</li> 
             <li>Score: ${score}</li>
         </ul>
-        <p>${currentQuestionObject.question}</p>
+        <p>${currentQuestionObject.question.question}</p>
         <form>
             <ol type="A">
               ${generateQuizAnswers(currentQuestionObject.question.answers)}
