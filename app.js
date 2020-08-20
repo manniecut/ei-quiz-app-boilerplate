@@ -103,6 +103,7 @@ function generateTitleString() {                      //generates title string
 }
 
 function generateQuizScreen(currentQuestionObject) {  //argument is currentQuestionObject[i: i + 1, question: store[i]]
+ //displays quiz score and progress as well as the current question and a list full of the possible answers
     return `
     <div class="quiz-interface">
         <ul>
@@ -121,7 +122,7 @@ function generateQuizScreen(currentQuestionObject) {  //argument is currentQuest
 
 }
 
-function generateQuizAnswers(answers) {               //EXPLAIN argument is currentQuestionObject.question.answers
+function generateQuizAnswers(answers) {               //argument is currentQuestionObject.question.answers
     let answerArray = [];                              //creates array for answers
     let indexArray = [];                               //creates array for indexs
     answers.forEach(answer => {
@@ -132,12 +133,12 @@ function generateQuizAnswers(answers) {               //EXPLAIN argument is curr
 };
 
 function generateAnswerResults() {                    //creates string for answer response page
-    const buttons = {
+    const buttons = {                                                     //creating possible buttons for screen
         next: '<button type="submit" class="next-question" autofocus>Next</button>',
         score: '<button type="submit" class="see-score" autofocus>Final Score</button>'
     }
-    let finalQuestion = ((currentQuestionNumber + 1) === store.length);
-    if (answerArray[0] === true) {
+    let finalQuestion = ((currentQuestionNumber + 1) === store.length);   //creates variable that checks if it's the last question for button display
+    if (answerArray[0] === true) {                                        //string for correct response
         return `
         <div class="answer-response">
         <h2>That is correct!</h2>
@@ -147,7 +148,7 @@ function generateAnswerResults() {                    //creates string for answe
         ${finalQuestion ? buttons.score : buttons.next}
         </div>
         `
-    } else {
+    } else {                                                              //string for incorrect response
         return `
         <div class="answer-response">
         <h2>That is not correct.</h2>
@@ -158,13 +159,6 @@ function generateAnswerResults() {                    //creates string for answe
         </div>
         `
     }
-    /*
-    makes possible buttons
-    checks if currently final question
-    returns string with correctresponse or incorrectresponse,
-    and button for next question or results
-    */
-
 }
 
 function createAnswerString(answer) {                 //creates string of answer list
@@ -218,7 +212,7 @@ function makeQuiz() {                         //displays score or title screen o
         if (currentQuestionNumber === store.length) {  //if currentQ# is totalQ# (aka quiz complete) change main to SCORE SCREEN
             const resultsString = generateScoreString();                  //set const to results of gSS function
             $('main').html(resultsString);                                //change main contents prev const resultsString
-        } else if (currentQuestionNumber < store.length) {        //if quiz incomplete (and not started) change main to TITLE SCREEN
+        } else if (currentQuestionNumber <= store.length) {        //if quiz incomplete (and not started) change main to TITLE SCREEN
             const titleScreenString = generateTitleString();              //set const to function gTS
             $('main').html(titleScreenString);                            //change main contents prev const
         }
@@ -237,7 +231,7 @@ function startQuiz() {                        //starts quizStarted tracker
     quizStarted = true;
 }
 
-function setQuestionObject() {                //returns [i: i + 1, question: store[i]]
+function setQuestionObject() {                //returns questionobject array [i: i + 1, question: store[i]]
     let i = currentQuestionNumber;
     let currentQuestionObject = store[i];     //sets the string for current question to value from array based on current question number
     return {
@@ -324,7 +318,7 @@ function listenSeeScore() {             //on '.see-score' click, shows score scr
 }
 
 function listenRestartQuiz() {          //on '.restart-quiz' click, initialize trackers and render title screen
-    $('main').on('click', '.restart-quiz', (event) => { //listens for a click on restart-quiz element
+    $('main').on('click', '#restart-quiz', (event) => { //listens for a click on restart-quiz element
         event.preventDefault();                              //stops default submission behavior
         restartQuiz();                                       //runs restartQuiz function to initialize trackers
         makeQuiz();                                          //renders title screen
