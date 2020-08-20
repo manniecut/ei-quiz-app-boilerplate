@@ -97,7 +97,7 @@ let answerArray = [];       //array tracks selected answer and correct answer
 
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
-function generateTitleString() {              //generates title string
+function generateTitleString() {                      //generates title string
     return `
     <h1>What is FPV?</h1>
     <img src="images/fpv-drone-sizes.jpg" alt="FPV drones of different sizes" class="images">
@@ -105,53 +105,109 @@ function generateTitleString() {              //generates title string
     <button type="button" id="start-quiz" autofocus>Begin</button>`;
 }
 
-function generateQuizInterface(currentQuestionObject) {  // argument is store[i].question
+function generateQuizScreen(currentQuestionObject) {  //argument is currentQuestionObject[i: i + 1, question: store[i]]
     return `
-    <div class='quiz-interface'>
-        
-        <p>Question ${currentQuestionObject.i} out of ${store.length}</p>
-       
+    <div class="quiz-interface">
+        <h3>Question: ${currentQuestionObject.i}/${store.length} Score: ${score}</h3>
         <p>${currentQuestionObject.question}</p>
-        
         <form>
             <ol type="A">
-              ${generateQuizAnswers(store[currentQuestionObject.i].answers)}
+              ${generateQuizAnswers(currentQuestionObject.question.answers)}
             </ol>
             <button type="submit" class="submit-answer">Submit Answer</button>
         </form> 
-       
-        <p>Score: ${score}</p>
     </div>
-    `            //first p is question counter using 
+    `;
 
 }
 
-function generateAnswerResults() {
-    
-
-}
-
-function generateQuizAnswers(answers) {     //argument is store[i].answers
-    let answerArray = [];
-    let indexArray = [];
+function generateQuizAnswers(answers) {               //EXPLAIN argument is currentQuestionObject.question.answers
+    let answerArray = [];                              //creates array for answers
+    let indexArray = [];                               //creates array for indexs
     answers.forEach(answer => {
         answerArray.push(answer);
         indexArray.push(answers.indexOf(answer));
     });
-    console.log(indexArray);
-    return answerArray.map(answer => stringifyAnswerArray(answer)).join('');
+    return answerArray.map(answer => createAnswerString(answer)).join('');
 };
 
-
-function stringifyAnswerArray(answer){
-
-  }
-
-function generateScoreString() {
+function generateAnswerResults() {                    //creates string for answer response page
+    const buttons = {
+        next: '<button type="submit" class="next-question" autofocus>Next</button>',
+        score: '<button type="submit" class="see-score" autofocus>Final Score</button>'
+    }
+    let finalQuestion = ((currentQuestionNumber + 1) === store.length);
+    if (answerArray[0] === true) {
+        return `
+        <div class="answer-response">
+        <h2>That is correct!</h2>
+        <img src="images/fpv-drone-vacation.jpg" alt="This FPV drone is wearing sunglasses" class="images">
+        <br>
+        <p>Looks like you've got the right stuff!</p>
+        ${isLastQuestion ? buttons.score : buttons.next}
+        </div>
+        `
+    } else {
+        return `
+        <div class="answer-response">
+        <h2>That is not correct.</h2>
+        <img src="images/fpv-drone-broken-gopro.jpg" alt="This FPV drone has a broken GoPro" class="images">
+        <br>
+        <p>The correct answer is: "${answerArray[1]}".</p>
+        ${isLastQuestion ? buttons.score : buttons.next}
+        </div>
+        `
+    }
+    /*
+    makes possible buttons
+    checks if currently final question
+    returns string with correctresponse or incorrectresponse,
+    and button for next question or results
+    */
 
 }
 
-function generateImage() {
+function createAnswerString(answer) {                 //creates string of answer list
+    let name = store[currentQuestionNumber].answers.indexOf(answer);  //variable set to recall index number of answer and apply it to the list item
+    return `
+    <li>
+    <div class="answer-container">
+    <input type="radio" name="answer" id="answer-${name}" data-answer="${answer}">
+    <label for="answer-${name}">${answer}</label>
+    </div>
+    </li>
+    `
+}
+
+function generateScoreString() {                      //creates string for score screen
+    if (score < (store.length / 2)) {              //if fail
+        return `
+        <h2>Crash!</h2>
+        <img src="images/fpv-drone-stuck-in-tree.jpg" alt="This FPV drone is stuck in a tree" class="images">
+        <br>
+        <p>Your score is ${score} out of ${store.length}</p>
+        <p>Get your drone out of that tree and try again?</p>
+        <button type="button" id="restart">Try Again</button>
+        `
+    } else if (score < store.length) {             //if passed
+        return `
+        <h2>You passed!</h2>
+        <img src="images/fpv-drone-back.jpg" alt="This FPV drone is ready to go!" class="images">
+        <br>
+        <p>Your score is ${score} out of ${store.length}</p>
+        <p>You're getting there, keep practicing!</p>
+        <button type="button" id="restart">Try Again</button>
+        `
+    } else {                                       //if aced it!
+        return `
+        <h2>Great job!</h2>
+        <img src="images/fpv-drone-vacation.jpg" alt="This FPV drone is on vacation!" class="images">
+        <br>
+        <p>Your score is ${score} out of ${store.length}</p>
+        <p>You know FPV!</p>
+        <button type="button" id="restart">Try Again</button>
+        `
+    }
 
 }
 
@@ -169,7 +225,7 @@ function makeQuiz() {                         //displays score or title screen o
         }
     } else if (quizStarted === true) {            //if the quiz has started, do this:
         if (submittingAnswer === false) {                                      //if not currently submitting an answer change main to QUESTION SCREEN
-            const quizInterfaceString = generateQuizInterface(setQuestionObject());      //set const based on generate function running with currentQ# function
+            const quizInterfaceString = generateQuizScreen(setQuestionObject());      //set const based on generate function running with currentQ# function
             $('main').html(quizInterfaceString);                                           //change main contents prev const
         } else if (submittingAnswer === true) {                                //if submitting answer change main to RESPONSE SCREEN
             const quizAnswerResponseString = generateAnswerResults();                      //set const to function gAR
@@ -178,41 +234,44 @@ function makeQuiz() {                         //displays score or title screen o
     }
 }
 
-function startQuiz() {   //starts quizStarted tracker
+function startQuiz() {                        //starts quizStarted tracker
     quizStarted = true;
 }
 
-// returns an object with an updated question number and the current question
-function setQuestionObject() {
+function setQuestionObject() {                //returns [i: i + 1, question: store[i]]
     let i = currentQuestionNumber;
     let currentQuestionObject = store[i];   //sets the string for current question to value from array based on current question number
     return {
         i: i + 1,
         question: currentQuestionObject
-
     };
 
 }
 
-function nextQuestion() {
+function nextQuestion() {                     //advances quiz to next question
+    if (currentQuestionNumber < store.length) {             //if cQN is less than questions amount
+        currentQuestionNumber++;                                  //cQN + 1
+        submittingAnswer = false;                                 //reset submitting answer
+    } else if (currentQuestionNumber === store.length) {    //if cQN is questions amount
+        quizStarted = false;                                      //reset quizStarted tracker
+    }
+}
+
+function checkCorrectAnswer() {               //DO
 
 }
 
-function checkCorrectAnswer() {
+function seeScore() {                         //DO
 
 }
 
-function seeScore() {
-
-}
-
-function restartQuiz() {
+function restartQuiz() {                      //DO
 
 }
 
 /********** EVENT HANDLER FUNCTIONS **********/
 
-function listenGenerateQuestion() {     //on '.start-quiz' click, starts quizStarted tracker and renders question
+function listenGenerateQuestion() {     //on '#start-quiz' click, starts quizStarted tracker and renders question
     $('main').on('click', '#start-quiz', (event) => {
         event.preventDefault();
         startQuiz();                    //updates quizStarted tracker
@@ -222,9 +281,9 @@ function listenGenerateQuestion() {     //on '.start-quiz' click, starts quizSta
 
 function listenSubmitAnswer() {         //on '.submit-answer' click, checks if right and renders response screen
     $('main').on('click', '.submit-answer', (event) => { //listens for click on .submit-answer and runs event
-        event.preventDefault();                //stops default submission
-        checkCorrectAnswer();                  //checks if the answer is right
-        makeQuiz();                            //renders submission response screen
+        event.preventDefault();                             //stops default submission
+        checkCorrectAnswer();                               //checks if the answer is right
+        makeQuiz();                                         //renders submission response screen
     });
 }
 
@@ -251,6 +310,7 @@ function listenRestartQuiz() {          //on '.restart-quiz' click, initialize t
         makeQuiz();                                          //renders title screen
     });
 }
+
 
 function runQuizApp() {
     makeQuiz();                       //render function - displays score or title screen or question screen or submission response
