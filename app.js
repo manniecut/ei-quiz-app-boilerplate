@@ -105,7 +105,10 @@ function generateTitleString() {                      //generates title string
 function generateQuizScreen(currentQuestionObject) {  //argument is currentQuestionObject[i: i + 1, question: store[i]]
     return `
     <div class="quiz-interface">
-        <h3>Question: ${currentQuestionObject.i}/${store.length} Score: ${score}</h3>
+        <ul>
+            <li>Question: ${currentQuestionObject.i}/${store.length}</li> 
+            <li>Score: ${score}</li>
+        </ul>
         <p>${currentQuestionObject.question}</p>
         <form>
             <ol type="A">
@@ -198,7 +201,7 @@ function generateScoreString() {                      //creates string for score
     } else {                                       //if aced it!
         return `
         <h2>Great job!</h2>
-        <img src="images/fpv-drone-vacation.jpg" alt="This FPV drone is on vacation!" class="images">
+        <img src="images/fpv-drone-sunset.jpg" alt="This FPV drone is on vacation!" class="images">
         <br>
         <p>Your score is ${score} out of ${store.length}</p>
         <p>You know FPV!</p>
