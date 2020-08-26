@@ -1,82 +1,86 @@
-const store = [
-    {
-        question: 'What does FPV stand for?',
-        answers: [
-            'Fishing Permits Verified',
-            'Fantastic Piloting Vehicle',
-            'First Person View',
-            'Futuristic Plane Vector'
-        ],
-        correctAnswer: 'First Person View'
-    },
-    {
-        question: 'How do FPV drone pilots control their drones?',
-        answers: [
-            'With a controller and goggles',
-            'With hand tracking and TV output',
-            'With a tablet and binoculars',
-            'With voice commands'
-        ],
-        correctAnswer: 'With a controller and goggles'
-    },
-    {
-        question: 'Why does an FPV drone commonly have 2 cameras on it?',
-        answers: [
-            'One camera for front direction, one camera for back direction',
-            'A camera pointing forward for each eye',
-            'One camera for left direction, one camera for right direction',
-            'One for streaming to goggles, and one for recording HD footage'
-        ],
-        correctAnswer: 'One for streaming to goggles, and one for recording HD footage'
-    },
-    {
-        question: 'What skills does FPV teach?',
-        answers: [
-            'Programming skills',
-            'Soldering and electronic circuitry skills',
-            'Aviation and real world physics demonstrations',
-            'All of the above'
-        ],
-        correctAnswer: 'All of the above'
-    },
-    {
-        question: 'Who is lobbying to limit recreational drone pilots and RC airplane enthusiasts alike so they have a monopoly over drone airspace use?',
-        answers: [
-            'DJI',
-            'Amazon',
-            'UPS',
-            'The Government'
-        ],
-        correctAnswer: 'Amazon'
-    },
-    {
-        question: 'Out of these options, where is it illegal to fly your drone without proper permission or permits?',
-        answers: [
-            'At the park, but check local ordinances',
-            'Over bodies of water, but check local ordinances',
-            'Over crowds, national parks, within 5 miles of airports',
-            'At a mountain range, but check local ordinances'
-        ],
-        correctAnswer: 'Over crowds, national parks, within 5 miles of airports'
-    },
-    {
-        question: "What can FPV drones do that other drones can't?",
-        answers: [
-            'Take out the trash',
-            'Deliver your food',
-            'Freestyle acrobatic tricks',
-            'Take your dog for a walk'
-        ],
-        correctAnswer: 'Freestyle acrobatic tricks'
-    }
-];
+const store = {
+    allQuestions: [
+        {
+            question: 'What does FPV stand for?',
+            answers: [
+                'Fishing Permits Verified',
+                'Fantastic Piloting Vehicle',
+                'First Person View',
+                'Futuristic Plane Vector'
+            ],
+            correctAnswer: 'First Person View'
+        },
+        {
+            question: 'How do FPV drone pilots control their drones?',
+            answers: [
+                'With a controller and goggles',
+                'With hand tracking and TV output',
+                'With a tablet and binoculars',
+                'With voice commands'
+            ],
+            correctAnswer: 'With a controller and goggles'
+        },
+        {
+            question: 'Why does an FPV drone commonly have 2 cameras on it?',
+            answers: [
+                'One camera for front direction, one camera for back direction',
+                'A camera pointing forward for each eye',
+                'One camera for left direction, one camera for right direction',
+                'One for streaming to goggles, and one for recording HD footage'
+            ],
+            correctAnswer: 'One for streaming to goggles, and one for recording HD footage'
+        },
+        {
+            question: 'What skills does FPV teach?',
+            answers: [
+                'Programming skills',
+                'Soldering and electronic circuitry skills',
+                'Aviation and real world physics demonstrations',
+                'All of the above'
+            ],
+            correctAnswer: 'All of the above'
+        },
+        {
+            question: 'Who is lobbying to limit recreational drone pilots and RC airplane enthusiasts alike so they have a monopoly over drone airspace use?',
+            answers: [
+                'DJI',
+                'Amazon',
+                'UPS',
+                'The Government'
+            ],
+            correctAnswer: 'Amazon'
+        },
+        {
+            question: 'Out of these options, where is it illegal to fly your drone without proper permission or permits?',
+            answers: [
+                'At the park, but check local ordinances',
+                'Over bodies of water, but check local ordinances',
+                'Over crowds, national parks, within 5 miles of airports',
+                'At a mountain range, but check local ordinances'
+            ],
+            correctAnswer: 'Over crowds, national parks, within 5 miles of airports'
+        },
+        {
+            question: "What can FPV drones do that other drones can't?",
+            answers: [
+                'Take out the trash',
+                'Deliver your food',
+                'Freestyle acrobatic tricks',
+                'Take your dog for a walk'
+            ],
+            correctAnswer: 'Freestyle acrobatic tricks'
+        }
+    ],
 
-// Creating tracker variables with initialized values
-let score = 0;                     //stores current score
-let currentQuestionNumber = 0;     //stores which question we're on
-let quizStarted = false;           //stores if the quiz has started
-let submittingAnswer = false;      //acts as a trigger for the makeQuiz function
-let answerArray = [];              //array tracks selected answer and correct answer and if they match
+    // Creating tracker variables with initialized values
+    score: 0,                     //stores current score
+    currentQuestionNumber: 0,     //stores which question we're on
+    quizStarted: false,           //stores if the quiz has started
+    submittingAnswer: false,      //acts as a trigger for the makeQuiz function
+    answerArray: [],              //array tracks selected answer and correct answer and if they match
+
+};
+
 
 
 /* Technical requirements:
@@ -103,12 +107,12 @@ function generateTitleString() {                      //generates title string
 }
 
 function generateQuizScreen(currentQuestionObject) {  //argument is currentQuestionObject[i: i + 1, question: store[i]]
- //displays quiz score and progress as well as the current question and a list full of the possible answers
+    //displays quiz score and progress as well as the current question and a list full of the possible answers
     return `
     <div class="quiz-interface">
         <ul>
-            <li>Question: ${currentQuestionObject.i}/${store.length}</li> 
-            <li>Score: ${score}</li>
+            <li>Question: ${currentQuestionObject.i}/${store.allQuestions.length}</li> 
+            <li>Score: ${store.score}</li>
         </ul>
         <p>${currentQuestionObject.question.question}</p>
         <form>
@@ -137,8 +141,8 @@ function generateAnswerResults() {                    //creates string for answe
         next: '<button type="submit" class="next-question" autofocus>Next</button>',
         score: '<button type="submit" class="see-score" autofocus>Final Score</button>'
     }
-    let finalQuestion = ((currentQuestionNumber + 1) === store.length);   //creates variable that checks if it's the last question for button display
-    if (answerArray[0] === true) {                                        //string for correct response
+    let finalQuestion = ((store.currentQuestionNumber + 1) === store.allQuestions.length);   //creates variable that checks if it's the last question for button display
+    if (store.answerArray[0] === true) {                                        //string for correct response
         return `
         <div class="answer-response">
         <h2>That is correct!</h2>
@@ -154,7 +158,7 @@ function generateAnswerResults() {                    //creates string for answe
         <h2>That is not correct.</h2>
         <img src="images/fpv-drone-broken-gopro.jpg" alt="This FPV drone has a broken GoPro" class="images">
         <br>
-        <p>The correct answer is: "${answerArray[1]}".</p>
+        <p>The correct answer is: "${store.answerArray[1]}".</p>
         ${finalQuestion ? buttons.score : buttons.next}
         </div>
         `
@@ -162,7 +166,7 @@ function generateAnswerResults() {                    //creates string for answe
 }
 
 function createAnswerString(answer) {                 //creates string of answer list
-    let name = store[currentQuestionNumber].answers.indexOf(answer);  //variable set to recall index number of answer and apply it to the list item
+    let name = store.allQuestions[store.currentQuestionNumber].answers.indexOf(answer);  //variable set to recall index number of answer and apply it to the list item
     return `
     <li>
     <div class="answer-container">
@@ -174,21 +178,21 @@ function createAnswerString(answer) {                 //creates string of answer
 }
 
 function generateScoreString() {                      //creates string for score screen
-    if (score < (store.length / 2)) {              //if fail
+    if (store.score < (store.allQuestions.length / 2)) {              //if fail
         return `
         <h2>Crash!</h2>
         <img src="images/fpv-drone-stuck-in-tree.jpg" alt="This FPV drone is stuck in a tree" class="images">
         <br>
-        <p>Your score is ${score} out of ${store.length}</p>
+        <p>Your score is ${store.score} out of ${store.allQuestions.length}</p>
         <p>Get your drone out of that tree and try again?</p>
         <button type="button" id="restart-quiz">Try Again</button>
         `
-    } else if (score < store.length) {             //if passed
+    } else if (store.score < store.allQuestions.length) {             //if passed
         return `
         <h2>You passed!</h2>
         <img src="images/fpv-drone-back.jpg" alt="This FPV drone is ready to go!" class="images">
         <br>
-        <p>Your score is ${score} out of ${store.length}</p>
+        <p>Your score is ${store.score} out of ${store.allQuestions.length}</p>
         <p>You're getting there, keep practicing!</p>
         <button type="button" id="restart-quiz">Try Again</button>
         `
@@ -197,7 +201,7 @@ function generateScoreString() {                      //creates string for score
         <h2>Great job!</h2>
         <img src="images/fpv-drone-sunset.jpg" alt="This FPV drone is on vacation!" class="images">
         <br>
-        <p>Your score is ${score} out of ${store.length}</p>
+        <p>Your score is ${store.score} out of ${store.allQuestions.length}</p>
         <p>You know FPV!</p>
         <button type="button" id="restart-quiz">Try Again</button>
         `
@@ -208,19 +212,19 @@ function generateScoreString() {                      //creates string for score
 /********** RENDER FUNCTION(S) **********/
 
 function makeQuiz() {                         //displays score or title screen or question screen or submission response 
-    if (quizStarted === false) {                  //if the quiz has NOT started, do this:
-        if (currentQuestionNumber === store.length) {  //if currentQ# is totalQ# (aka quiz complete) change main to SCORE SCREEN
+    if (store.quizStarted === false) {                  //if the quiz has NOT started, do this:
+        if (store.currentQuestionNumber === store.allQuestions.length) {  //if currentQ# is totalQ# (aka quiz complete) change main to SCORE SCREEN
             const resultsString = generateScoreString();                  //set const to results of gSS function
             $('main').html(resultsString);                                //change main contents prev const resultsString
-        } else if (currentQuestionNumber <= store.length) {        //if quiz incomplete (and not started) change main to TITLE SCREEN
+        } else if (store.currentQuestionNumber <= store.allQuestions.length) {        //if quiz incomplete (and not started) change main to TITLE SCREEN
             const titleScreenString = generateTitleString();              //set const to function gTS
             $('main').html(titleScreenString);                            //change main contents prev const
         }
-    } else if (quizStarted === true) {            //if the quiz has started, do this:
-        if (submittingAnswer === false) {                                      //if not currently submitting an answer change main to QUESTION SCREEN
+    } else if (store.quizStarted === true) {            //if the quiz has started, do this:
+        if (store.submittingAnswer === false) {                                      //if not currently submitting an answer change main to QUESTION SCREEN
             const quizInterfaceString = generateQuizScreen(setQuestionObject());      //set const based on generate function running with currentQ# function
             $('main').html(quizInterfaceString);                                           //change main contents prev const
-        } else if (submittingAnswer === true) {                                //if submitting answer change main to RESPONSE SCREEN
+        } else if (store.submittingAnswer === true) {                                //if submitting answer change main to RESPONSE SCREEN
             const quizAnswerResponseString = generateAnswerResults();                      //set const to function gAR
             $('main').html(quizAnswerResponseString);                                      //change main contents prev const
         }
@@ -228,12 +232,12 @@ function makeQuiz() {                         //displays score or title screen o
 }
 
 function startQuiz() {                        //starts quizStarted tracker
-    quizStarted = true;
+    store.quizStarted = true;
 }
 
 function setQuestionObject() {                //returns questionobject array [i: i + 1, question: store[i]]
-    let i = currentQuestionNumber;
-    let currentQuestionObject = store[i];     //sets the string for current question to value from array based on current question number
+    let i = store.currentQuestionNumber;
+    let currentQuestionObject = store.allQuestions[i];     //sets the string for current question to value from array based on current question number
     return {
         i: i + 1,
         question: currentQuestionObject
@@ -242,28 +246,28 @@ function setQuestionObject() {                //returns questionobject array [i:
 }
 
 function nextQuestion() {                     //advances quiz to next question
-    if (currentQuestionNumber < store.length) {             //if cQN is less than questions amount
-        currentQuestionNumber++;                                  //cQN + 1
-        submittingAnswer = false;                                 //reset submitting answer
-    } else if (currentQuestionNumber === store.length) {    //if cQN is questions amount
-        quizStarted = false;                                      //reset quizStarted tracker
+    if (store.currentQuestionNumber < store.allQuestions.length) {             //if cQN is less than questions amount
+        store.currentQuestionNumber++;                                  //cQN + 1
+        store.submittingAnswer = false;                                 //reset submitting answer
+    } else if (store.currentQuestionNumber === store.allQuestions.length) {    //if cQN is questions amount
+        store.quizStarted = false;                                      //reset quizStarted tracker
     }
 }
 
 function checkCorrectAnswer() {               //checks which answer was selected and compares to correct answer
     let radios = $('input:radio[name=answer]');
     let selectedAnswer = $('input[name="answer"]:checked').data('answer');   //creates a variable with the selected answer
-    let correctAnswer = store[currentQuestionNumber].correctAnswer;          //creates a variable with the correct answer
+    let correctAnswer = store.allQuestions[store.currentQuestionNumber].correctAnswer;          //creates a variable with the correct answer
     if (radios.filter(':checked').length === 0) {         //if no answer has been selected
         alert('You must pick one!');                            //alert user to make selection
         return;                                                 //end script
     } else {                                              //if answer has been selected
-        submittingAnswer = true;                                //set submitting tracker to true
+        store.submittingAnswer = true;                                //set submitting tracker to true
         if (selectedAnswer === correctAnswer) {                 //if answer is correct
-            score++;                                                     //add 1 to score
-            answerArray = [true, correctAnswer, selectedAnswer];         //set answer array
+            store.score++;                                                     //add 1 to score
+            store.answerArray = [true, correctAnswer, selectedAnswer];         //set answer array
         } else {                                                //if incorrect
-            answerArray = [false, correctAnswer, selectedAnswer];        //set answer array
+            store.answerArray = [false, correctAnswer, selectedAnswer];        //set answer array
         }
 
     }
@@ -271,16 +275,17 @@ function checkCorrectAnswer() {               //checks which answer was selected
 }
 
 function seeScore() {                         //sets trackers appropriately to trigger score screen
-    quizStarted = false;
-    currentQuestionNumber++;
+    store.quizStarted = false;
+    store.currentQuestionNumber++;
 
 }
 
 function restartQuiz() {                      //initializes tracker values
-    currentQuestionNumber = 0;
-    quizStarted = false;
-    submittingAnswer = false;
-    answerArray = [];
+    store.currentQuestionNumber = 0;
+    store.quizStarted = false;
+    store.submittingAnswer = false;
+    store.answerArray = [];
+    store.score = 0;
 }
 
 /********** EVENT HANDLER FUNCTIONS **********/
